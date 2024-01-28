@@ -3,9 +3,9 @@ import org.ajoberstar.grgit.Grgit
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.git.plugin)
     `java-library`
     `maven-publish`
-    id("org.ajoberstar.grgit") version ("5.2.1")
 }
 
 group = "moe.styx"

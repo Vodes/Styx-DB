@@ -4,6 +4,7 @@
 [versions]
 styx-types = "0.5"
 kotlin = "1.9.20"
+grgit = "5.2.1"
 
 [libraries]
 styx-types = { module = "moe.styx:styx-types", version.ref = "styx-types" }
@@ -11,3 +12,4 @@ styx-types = { module = "moe.styx:styx-types", version.ref = "styx-types" }
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+git-plugin = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
