@@ -108,7 +108,7 @@ fun StyxDBClient.save(fav: Favourite): Boolean {
 }
 
 fun StyxDBClient.delete(fav: Favourite): Boolean {
-    val stat = openStatement("DELETE FROM Favourites WHERE WHERE mediaID=? AND userID=?;") {
+    val stat = openStatement("DELETE FROM Favourites WHERE mediaID=? AND userID=?;") {
         setString(1, fav.mediaID)
         setString(2, fav.userID)
     }
