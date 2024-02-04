@@ -91,7 +91,7 @@ fun StyxDBClient.getCategories(conditions: Map<String, Any>? = null): List<Categ
 fun StyxDBClient.save(fav: Favourite): Boolean {
     val edit = objectExistsTwo("mediaID", "userID", fav.mediaID, fav.userID, "Favourites")
     val query = if (edit)
-        "UPDATE Favourites SET mediaID=?, userID=?, added=? WHERE entryID=? AND userID=?;"
+        "UPDATE Favourites SET mediaID=?, userID=?, added=? WHERE mediaID=? AND userID=?;"
     else
         "INSERT INTO Favourites (mediaID, userID, added) VALUES(?, ?, ?);"
 
