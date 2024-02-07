@@ -29,7 +29,7 @@ fun StyxDBClient.save(activeUser: ActiveUser): Boolean {
 }
 
 fun StyxDBClient.delete(activeUser: ActiveUser): Boolean {
-    val stat = openStatement("DELETE FROM ActiveUsers WHERE WHERE deviceID=? AND userID=?;") {
+    val stat = openStatement("DELETE FROM ActiveUsers WHERE deviceID=? AND userID=?;") {
         setString(1, activeUser.deviceID)
         setString(2, activeUser.user.GUID)
     }
