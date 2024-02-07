@@ -8,11 +8,12 @@ import java.net.URLDecoder
 import java.net.URLEncoder
 
 fun StyxDBClient.save(episodeInfo: LegacyEpisodeInfo, newID: String? = null): Boolean {
-    val edit = objectExists(episodeInfo.GUID, "Episodes", "PermID")
+    val edit = objectExists(episodeInfo.permID, "Episodes", "PermID")
     val query = if (edit)
         "UPDATE Episodes SET GUID=?, PermID=?, Date=?, Name=?, EP=?, ep_name_en=?, ep_name_de=?, summary_en=?, summary_de=?, FilePath=?, FileSize=?, PrevName=? WHERE PermID=?;"
     else
-        "INSERT INTO Episodes (GUID, PermID, Date, Name, EP, ep_name_en, ep_name_de, summary_en, summary_de, FilePath, FileSize, PrevName) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
+        "INSERT INTO Episodes (GUID, PermID, Date, Name, EP, ep_name_en, ep_name_de, summary_en, summary_de, FilePath, FileSize, PrevName) " +
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
 
     val stat = openStatement(query) {
         setString(1, if (newID.isNullOrBlank()) episodeInfo.permID else newID)
