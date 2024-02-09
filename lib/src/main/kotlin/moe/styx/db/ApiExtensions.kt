@@ -1,8 +1,8 @@
 package moe.styx.db
 
-import moe.styx.types.Log
-import moe.styx.types.LogType
-import moe.styx.types.toBoolean
+import moe.styx.common.data.Log
+import moe.styx.common.data.LogType
+import moe.styx.common.extension.toBoolean
 
 fun StyxDBClient.save(log: Log): Boolean {
     val edit = objectExistsTwo("userID", "time", log.userID, log.time.toString(), "Logs")

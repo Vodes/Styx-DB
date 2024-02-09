@@ -1,7 +1,12 @@
 package moe.styx.db
 
 import kotlinx.serialization.encodeToString
-import moe.styx.types.*
+import moe.styx.common.data.Device
+import moe.styx.common.data.DeviceInfo
+import moe.styx.common.data.UnregisteredDevice
+import moe.styx.common.data.User
+import moe.styx.common.extension.toBoolean
+import moe.styx.common.json
 
 // User
 

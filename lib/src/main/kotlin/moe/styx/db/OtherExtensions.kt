@@ -1,9 +1,9 @@
 package moe.styx.db
 
-import moe.styx.types.Category
-import moe.styx.types.Favourite
-import moe.styx.types.Image
-import moe.styx.types.toBoolean
+import moe.styx.common.data.Category
+import moe.styx.common.data.Favourite
+import moe.styx.common.data.Image
+import moe.styx.common.extension.toBoolean
 
 // Image
 

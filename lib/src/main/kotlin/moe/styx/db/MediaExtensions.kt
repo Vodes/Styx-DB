@@ -1,6 +1,7 @@
 package moe.styx.db
 
-import moe.styx.types.*
+import moe.styx.common.data.*
+import moe.styx.common.extension.toBoolean
 
 // MediaInfo
 

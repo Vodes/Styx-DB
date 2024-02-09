@@ -1,9 +1,9 @@
 package moe.styx.db
 
-import moe.styx.types.LegacyAnimeInfo
-import moe.styx.types.LegacyEpisodeInfo
-import moe.styx.types.LegacyMovieInfo
-import moe.styx.types.toBoolean
+import moe.styx.common.data.LegacyAnimeInfo
+import moe.styx.common.data.LegacyEpisodeInfo
+import moe.styx.common.data.LegacyMovieInfo
+import moe.styx.common.extension.toBoolean
 import java.net.URLDecoder
 import java.net.URLEncoder
 

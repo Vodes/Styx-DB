@@ -1,9 +1,9 @@
 package moe.styx.db
 
 import kotlinx.serialization.encodeToString
-import moe.styx.types.DownloaderTarget
-import moe.styx.types.json
-import moe.styx.types.toBoolean
+import moe.styx.common.data.DownloaderTarget
+import moe.styx.common.extension.toBoolean
+import moe.styx.common.json
 
 fun StyxDBClient.save(target: DownloaderTarget, newID: String? = null): Boolean {
     val edit = objectExists(target.mediaID, "DownloaderTargets", "mediaID")

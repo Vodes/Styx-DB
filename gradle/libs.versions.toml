@@ -2,12 +2,12 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-styx-types = "0.6"
-kotlin = "1.9.21"
+styx-common = "0.0.1"
+kotlin = "1.9.22"
 grgit = "5.2.1"
 
 [libraries]
-styx-types = { module = "moe.styx:styx-types", version.ref = "styx-types" }
+styx-common = { module = "moe.styx:styx-common", version.ref = "styx-common" }
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

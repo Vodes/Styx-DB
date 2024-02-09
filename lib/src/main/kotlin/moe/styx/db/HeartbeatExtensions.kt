@@ -1,9 +1,9 @@
 package moe.styx.db
 
 import kotlinx.serialization.encodeToString
-import moe.styx.types.ActiveUser
-import moe.styx.types.json
-import moe.styx.types.toBoolean
+import moe.styx.common.data.ActiveUser
+import moe.styx.common.extension.toBoolean
+import moe.styx.common.json
 
 fun StyxDBClient.save(activeUser: ActiveUser): Boolean {
     val exists = objectExistsTwo("userID", "deviceID", activeUser.user.GUID, activeUser.deviceID, "ActiveUsers")

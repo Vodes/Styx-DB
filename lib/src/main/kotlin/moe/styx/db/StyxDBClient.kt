@@ -1,7 +1,7 @@
 package moe.styx.db
 
-import moe.styx.types.toBoolean
-import moe.styx.types.toInt
+import moe.styx.common.extension.toBoolean
+import moe.styx.common.extension.toInt
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement

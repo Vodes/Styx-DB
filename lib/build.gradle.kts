@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "moe.styx"
-version = "0.5"
+version = "0.0.5"
 
 repositories {
     mavenCentral()
@@ -17,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    api(libs.styx.types)
+    api(libs.styx.common)
 }
 
 java {
@@ -33,7 +33,7 @@ publishing {
         create<MavenPublication>("build") {
             groupId = "moe.styx"
             artifactId = "styx-db"
-            version = "0.5"
+            version = "0.0.5"
 
             from(components["java"])
         }
