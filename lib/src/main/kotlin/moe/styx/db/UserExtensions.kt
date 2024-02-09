@@ -44,12 +44,12 @@ fun StyxDBClient.getUsers(conditions: Map<String, Any>? = null): List<User> {
 
 // Devices
 
-fun StyxDBClient.save(device: Device, newID: String? = null): Boolean {
-    val edit = objectExists(device.GUID, "UserDevices")
+private fun StyxDBClient._save(device: Device, newID: String? = null, table: String): Boolean {
+    val edit = objectExists(device.GUID, table)
     val query = if (edit)
-        "UPDATE UserDevices SET GUID=?, userID=?, deviceName=?, deviceInfo=?, lastUsed=?, accessToken=?, watchToken=?, refreshToken=?, tokenExpiry=? WHERE GUID=?;"
+        "UPDATE $table SET GUID=?, userID=?, deviceName=?, deviceInfo=?, lastUsed=?, accessToken=?, watchToken=?, refreshToken=?, tokenExpiry=? WHERE GUID=?;"
     else
-        "INSERT INTO UserDevices (GUID, userID, deviceName, deviceInfo, lastUsed, accessToken, watchToken, refreshToken, tokenExpiry) " +
+        "INSERT INTO $table (GUID, userID, deviceName, deviceInfo, lastUsed, accessToken, watchToken, refreshToken, tokenExpiry) " +
                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);"
 
     val stat = openStatement(query) {
@@ -68,7 +68,13 @@ fun StyxDBClient.save(device: Device, newID: String? = null): Boolean {
     return stat.executeUpdate().toBoolean().also { stat.close() }
 }
 
-fun StyxDBClient.delete(device: Device): Boolean = genericDelete(device.GUID, "UserDevices")
+fun StyxDBClient.save(device: Device, newID: String? = null): Boolean {
+    return _save(device, newID, "UserDevices")
+}
+
+fun StyxDBClient.delete(device: Device): Boolean {
+    return genericDelete(device.GUID, "UserDevices") && _save(device, null, "DeviceGraveyard")
+}
 
 fun StyxDBClient.getDevices(conditions: Map<String, Any>? = null): List<Device> {
     val devices = mutableListOf<Device>()
