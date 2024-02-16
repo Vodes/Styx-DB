@@ -7,7 +7,7 @@ kotlin = "1.9.22"
 grgit = "5.2.1"
 
 [libraries]
-styx-common = { module = "moe.styx:styx-common", version.ref = "styx-common" }
+styx-common = { module = "moe.styx:styx-common-jvm", version.ref = "styx-common" }
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

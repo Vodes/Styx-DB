@@ -1,5 +1,3 @@
-import org.ajoberstar.grgit.Grgit
-
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.serialization)
@@ -13,7 +11,8 @@ version = "0.0.5"
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven { url = uri("https://repo.styx.moe/releases") }
+    maven { url = uri("https://repo.styx.moe/snapshots") }
 }
 
 dependencies {
@@ -29,38 +28,29 @@ java {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "Styx"
+            url = if (version.toString().contains("-SNAPSHOT", true))
+                uri("https://repo.styx.moe/snapshots")
+            else
+                uri("https://repo.styx.moe/releases")
+            credentials {
+                username = System.getenv("STYX_REPO_TOKEN")
+                password = System.getenv("STYX_REPO_SECRET")
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
     publications {
         create<MavenPublication>("build") {
-            groupId = "moe.styx"
+            groupId = project.group.toString()
             artifactId = "styx-db"
-            version = "0.0.5"
+            version = project.version.toString()
 
             from(components["java"])
         }
     }
 }
-
-tasks.register("buildExternalDeps") {
-    val isWin = System.getProperty("os.name").contains("win", true)
-    val projectDir = layout.projectDirectory.asFile.parentFile
-    val outDir = File(projectDir, ".temp-deps/styx-types")
-    doFirst {
-        outDir.deleteRecursively()
-        Grgit.clone {
-            dir = outDir
-            uri = "https://github.com/Vodes/Styx-Types.git"
-        }
-        val result = kotlin.runCatching {
-            ProcessBuilder(listOf(if (isWin) "./gradlew.bat" else "./gradlew", "publishToMavenLocal"))
-                .directory(outDir)
-                .inheritIO()
-                .start().waitFor()
-        }.getOrNull() ?: -1
-        if (result != 0) {
-            outDir.deleteRecursively()
-            throw StopExecutionException()
-        }
-    }
-    doLast { outDir.deleteRecursively() }
-}
-
