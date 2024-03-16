@@ -7,12 +7,11 @@ plugins {
 }
 
 group = "moe.styx"
-version = "0.0.6"
+version = "0.0.7"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://repo.styx.moe/releases") }
-    maven { url = uri("https://repo.styx.moe/snapshots") }
+    maven("https://repo.styx.moe/releases")
 }
 
 dependencies {
