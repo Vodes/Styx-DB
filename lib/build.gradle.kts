@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.git.plugin)
     `java-library`
     `maven-publish`
 }
@@ -15,12 +14,18 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.jdbc.postgre)
     api(libs.styx.common)
+    api(libs.hikaricp)
+
+    api(libs.jetbrains.exposed.core)
+    api(libs.jetbrains.exposed.dao)
+    api(libs.jetbrains.exposed.jdbc)
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
     withSourcesJar()
     withJavadocJar()
