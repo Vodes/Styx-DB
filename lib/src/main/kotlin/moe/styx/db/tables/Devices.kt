@@ -2,6 +2,7 @@ package moe.styx.db.tables
 
 import moe.styx.common.data.Device
 import moe.styx.common.data.DeviceInfo
+import moe.styx.common.data.UnregisteredDevice
 import moe.styx.common.extension.toBoolean
 import moe.styx.common.json
 import org.jetbrains.exposed.sql.*
@@ -80,4 +81,41 @@ object DeviceGraveyard : Table("DeviceGraveyard") {
     val tokenExpiry = long("tokenExpiry").nullable()
 
     override val primaryKey = PrimaryKey(GUID)
+}
+
+object DeviceTrafficTable : Table("DeviceTraffic") {
+    val deviceID = varchar("deviceID", 36).references(DeviceTable.GUID)
+    val year = integer("year")
+    val month = integer("month")
+    val day = integer("day")
+    val bytes = long("bytes")
+
+    override val primaryKey = PrimaryKey(deviceID, year, month, day)
+}
+
+object UnregisteredDeviceTable : Table("UnregisteredDevices") {
+    val GUID = varchar("GUID", 36)
+    val deviceInfo = jsonCol<DeviceInfo>("deviceInfo", json)
+    val codeExpiry = long("codeExpiry")
+    val code = integer("code")
+
+    override val primaryKey = PrimaryKey(GUID)
+
+    fun upsertItem(item: UnregisteredDevice) = upsert {
+        it[GUID] = item.GUID
+        it[deviceInfo] = item.deviceInfo
+        it[codeExpiry] = item.codeExpiry
+        it[code] = item.code
+    }
+
+    fun query(block: UnregisteredDeviceTable.() -> List<ResultRow>): List<UnregisteredDevice> {
+        return block(this).map {
+            UnregisteredDevice(
+                it[GUID],
+                it[deviceInfo],
+                it[codeExpiry],
+                it[code]
+            )
+        }
+    }
 }

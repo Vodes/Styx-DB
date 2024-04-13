@@ -5,25 +5,21 @@ import moe.styx.common.data.MediaActivity
 import moe.styx.common.data.User
 import moe.styx.common.extension.eqI
 import moe.styx.common.json
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.statements.UpsertStatement
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.json.json as jsonCol
 
 
 object ActiveUserTable : Table("ActiveUsers") {
-    val userID = varchar("userID", 36).references(UserTable.GUID)
-    val deviceID = varchar("deviceID", 36).uniqueIndex().references(DeviceTable.GUID)
+    val userID = varchar("userID", 36).references(UserTable.GUID, onDelete = ReferenceOption.CASCADE)
+    val deviceID = varchar("deviceID", 36).uniqueIndex().references(DeviceTable.GUID, onDelete = ReferenceOption.CASCADE)
     val deviceType = text("deviceType")
     val lastPing = long("lastPing").nullable()
     val mediaActivity = jsonCol<MediaActivity>("mediaActivity", json).nullable()
     val listeningTo = varchar("listeningTo", 36).nullable()
 
-    override val primaryKey: PrimaryKey = PrimaryKey(userID, deviceID)
+    override val primaryKey = PrimaryKey(userID, deviceID)
 
-    fun upsertItem(item: ActiveUser): UpsertStatement<Long> = upsert {
+    fun upsertItem(item: ActiveUser) = upsert {
         it[userID] = item.user.GUID
         it[deviceID] = item.deviceID
         it[deviceType] = item.deviceType
@@ -52,7 +48,7 @@ object UserTable : Table("User") {
 
     override val primaryKey = PrimaryKey(GUID)
 
-    fun upsertItem(item: User): UpsertStatement<Long> = upsert {
+    fun upsertItem(item: User) = upsert {
         it[GUID] = item.GUID
         it[name] = item.name
         it[discordID] = item.discordID
