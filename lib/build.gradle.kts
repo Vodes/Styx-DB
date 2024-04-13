@@ -14,13 +14,15 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.jdbc.postgre)
     api(libs.styx.common)
     api(libs.hikaricp)
 
     api(libs.jetbrains.exposed.core)
     api(libs.jetbrains.exposed.dao)
     api(libs.jetbrains.exposed.jdbc)
+    api(libs.jetbrains.exposed.json)
+
+    testImplementation(libs.jdbc.postgre)
 }
 
 java {
