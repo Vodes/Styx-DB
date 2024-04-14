@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.upsert
 import org.jetbrains.exposed.sql.json.json as jsonCol
 
-object MediaTable : Table("Media") {
+object MediaTable : Table("media") {
     val GUID = varchar("GUID", 36).uniqueIndex()
     val name = mediumText("name")
     val nameEN = mediumText("nameEN").nullable()
@@ -72,7 +72,7 @@ object MediaTable : Table("Media") {
     }
 }
 
-object ImageTable : Table("Image") {
+object ImageTable : Table("images") {
     val GUID = varchar("GUID", 36)
     val hasWEBP = integer("hasWEBP").nullable()
     val hasJPG = integer("hasJPG").nullable()
@@ -105,7 +105,7 @@ object ImageTable : Table("Image") {
     }
 }
 
-object MediaScheduleTable : Table("MediaSchedule") {
+object MediaScheduleTable : Table("media_schedule") {
     val mediaID = varchar("mediaID", 36).references(MediaTable.GUID, onDelete = ReferenceOption.CASCADE)
     val day = text("day")
     val hour = integer("hour")
@@ -138,12 +138,14 @@ object MediaScheduleTable : Table("MediaSchedule") {
     }
 }
 
-object CategoryTable : Table("Category") {
+object CategoryTable : Table("media_category") {
     val GUID = varchar("GUID", 36)
     val sort = integer("sort")
     val isSeries = integer("isSeries")
     val isVisible = integer("isVisible")
     val name = mediumText("name")
+
+    override val primaryKey = PrimaryKey(GUID)
 
     fun upsertItem(item: Category) = upsert {
         it[GUID] = item.GUID

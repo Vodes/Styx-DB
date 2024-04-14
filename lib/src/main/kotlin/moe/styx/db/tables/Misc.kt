@@ -6,7 +6,7 @@ import moe.styx.common.data.LogType
 import moe.styx.common.extension.currentUnixSeconds
 import org.jetbrains.exposed.sql.*
 
-object LogTable : Table("Logs") {
+object LogTable : Table("logs") {
     val userID = varchar("userID", 36).references(UserTable.GUID, onDelete = ReferenceOption.CASCADE)
     val deviceID = varchar("deviceID", 36).references(DeviceTable.GUID)
     val type = text("type")
@@ -34,7 +34,7 @@ object LogTable : Table("Logs") {
     }
 }
 
-object ChangesTable : Table("Changes") {
+object ChangesTable : Table("change") {
     val id = integer("id").default(0)
     val lastEntryChange = long("lastEntryChange")
     val lastMediaChange = long("lastMediaChange")

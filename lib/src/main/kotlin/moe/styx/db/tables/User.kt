@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.json.json as jsonCol
 
 
-object ActiveUserTable : Table("ActiveUsers") {
+object ActiveUserTable : Table("user_active") {
     val userID = varchar("userID", 36).references(UserTable.GUID, onDelete = ReferenceOption.CASCADE)
     val deviceID = varchar("deviceID", 36).uniqueIndex().references(DeviceTable.GUID, onDelete = ReferenceOption.CASCADE)
     val deviceType = text("deviceType")
@@ -38,7 +38,7 @@ object ActiveUserTable : Table("ActiveUsers") {
     }
 }
 
-object UserTable : Table("User") {
+object UserTable : Table("user") {
     val GUID = varchar("GUID", 36)
     val name = mediumText("name")
     val discordID = mediumText("discordID")

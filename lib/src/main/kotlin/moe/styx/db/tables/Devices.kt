@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.json.json as jsonCol
 
-object DeviceTable : Table("UserDevices") {
+object DeviceTable : Table("device") {
     val GUID = varchar("GUID", 36)
     val userID = varchar("userID", 36).references(UserTable.GUID)
     val deviceName = text("deviceName")
@@ -69,7 +69,7 @@ object DeviceTable : Table("UserDevices") {
     }
 }
 
-object DeviceGraveyard : Table("DeviceGraveyard") {
+object DeviceGraveyard : Table("device_graveyard") {
     val GUID = varchar("GUID", 36)
     val userID = varchar("userID", 36).references(UserTable.GUID)
     val deviceName = text("deviceName")
@@ -83,7 +83,7 @@ object DeviceGraveyard : Table("DeviceGraveyard") {
     override val primaryKey = PrimaryKey(GUID)
 }
 
-object DeviceTrafficTable : Table("DeviceTraffic") {
+object DeviceTrafficTable : Table("device_traffic") {
     val deviceID = varchar("deviceID", 36).references(DeviceTable.GUID)
     val year = integer("year")
     val month = integer("month")
@@ -93,7 +93,7 @@ object DeviceTrafficTable : Table("DeviceTraffic") {
     override val primaryKey = PrimaryKey(deviceID, year, month, day)
 }
 
-object UnregisteredDeviceTable : Table("UnregisteredDevices") {
+object UnregisteredDeviceTable : Table("device_unregistered") {
     val GUID = varchar("GUID", 36)
     val deviceInfo = jsonCol<DeviceInfo>("deviceInfo", json)
     val codeExpiry = long("codeExpiry")

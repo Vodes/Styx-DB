@@ -7,7 +7,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.upsert
 
-object FavouriteTable : Table("Favourites") {
+object FavouriteTable : Table("user_favourite") {
     val mediaID = varchar("mediaID", 36).references(MediaTable.GUID, onDelete = ReferenceOption.CASCADE)
     val userID = varchar("userID", 36).references(UserTable.GUID, onDelete = ReferenceOption.CASCADE)
     val added = long("added")
@@ -31,7 +31,7 @@ object FavouriteTable : Table("Favourites") {
     }
 }
 
-object MediaWatchedTable : Table("MediaWatched") {
+object MediaWatchedTable : Table("user_media_watched") {
     val entryID = varchar("entryID", 36).references(MediaEntryTable.GUID, onDelete = ReferenceOption.CASCADE)
     val userID = varchar("userID", 36).references(UserTable.GUID, onDelete = ReferenceOption.CASCADE)
     val lastWatched = long("lastWatched")
