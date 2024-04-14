@@ -10,17 +10,17 @@ import org.jetbrains.exposed.sql.upsert
 import org.jetbrains.exposed.sql.json.json as jsonCol
 
 object MediaTable : Table("media") {
-    val GUID = varchar("GUID", 36).uniqueIndex()
+    val GUID = varchar("GUID", 36)
     val name = mediumText("name")
     val nameEN = mediumText("nameEN").nullable()
     val nameJP = mediumText("nameJP").nullable()
     val synopsisEN = largeText("synopsisEN").nullable()
     val synopsisDE = largeText("synopsisDE").nullable()
-    val thumbID = varchar("thumbID", 36).references(ImageTable.GUID).nullable()
-    val bannerID = varchar("bannerID", 36).references(ImageTable.GUID).nullable()
-    val categoryID = varchar("categoryID", 36).references(CategoryTable.GUID).nullable()
-    val prequel = varchar("prequel", 36).references(GUID, onDelete = ReferenceOption.SET_NULL).nullable()
-    val sequel = varchar("sequel", 36).references(GUID, onDelete = ReferenceOption.SET_NULL).nullable()
+    val thumbID = reference("thumbID", ImageTable.GUID, onDelete = ReferenceOption.SET_NULL, onUpdate = ReferenceOption.CASCADE).nullable()
+    val bannerID = reference("bannerID", ImageTable.GUID, onDelete = ReferenceOption.SET_NULL, onUpdate = ReferenceOption.CASCADE).nullable()
+    val categoryID = reference("categoryID", CategoryTable.GUID, onDelete = ReferenceOption.SET_NULL, onUpdate = ReferenceOption.CASCADE).nullable()
+    val prequel = varchar("prequel", 36).nullable()
+    val sequel = varchar("sequel", 36).nullable()
     val genres = mediumText("genres").nullable()
     val tags = mediumText("tags").nullable()
     val metadataMap = jsonCol<MappingCollection>("metadataMap", json).nullable()
@@ -36,9 +36,9 @@ object MediaTable : Table("media") {
         it[nameJP] = item.nameJP
         it[synopsisEN] = item.synopsisEN
         it[synopsisDE] = item.synopsisDE
-        it[thumbID] = item.thumbID
-        it[bannerID] = item.bannerID
-        it[categoryID] = item.categoryID
+        it[thumbID] = if (item.thumbID.isNullOrBlank()) null else item.thumbID
+        it[bannerID] = if (item.bannerID.isNullOrBlank()) null else item.bannerID
+        it[categoryID] = if (item.categoryID.isNullOrBlank()) null else item.categoryID
         it[prequel] = item.prequel
         it[sequel] = item.sequel
         it[genres] = item.genres
@@ -106,7 +106,7 @@ object ImageTable : Table("images") {
 }
 
 object MediaScheduleTable : Table("media_schedule") {
-    val mediaID = varchar("mediaID", 36).references(MediaTable.GUID, onDelete = ReferenceOption.CASCADE)
+    val mediaID = reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
     val day = text("day")
     val hour = integer("hour")
     val minute = integer("minute")

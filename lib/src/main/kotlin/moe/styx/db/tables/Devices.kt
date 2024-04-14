@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.json.json as jsonCol
 
 object DeviceTable : Table("device") {
     val GUID = varchar("GUID", 36)
-    val userID = varchar("userID", 36).references(UserTable.GUID)
+    val userID = reference("userID", UserTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
     val deviceName = text("deviceName")
     val deviceInfo = jsonCol<DeviceInfo>("deviceInfo", json)
     val lastUsed = long("lastUsed").nullable()
@@ -71,7 +71,7 @@ object DeviceTable : Table("device") {
 
 object DeviceGraveyard : Table("device_graveyard") {
     val GUID = varchar("GUID", 36)
-    val userID = varchar("userID", 36).references(UserTable.GUID)
+    val userID = reference("userID", UserTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
     val deviceName = text("deviceName")
     val deviceInfo = jsonCol<DeviceInfo>("deviceInfo", json)
     val lastUsed = long("lastUsed").nullable()
@@ -84,7 +84,7 @@ object DeviceGraveyard : Table("device_graveyard") {
 }
 
 object DeviceTrafficTable : Table("device_traffic") {
-    val deviceID = varchar("deviceID", 36).references(DeviceTable.GUID)
+    val deviceID = reference("deviceID", DeviceTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
     val year = integer("year")
     val month = integer("month")
     val day = integer("day")

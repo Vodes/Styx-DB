@@ -10,8 +10,8 @@ import org.jetbrains.exposed.sql.json.json as jsonCol
 
 
 object ActiveUserTable : Table("user_active") {
-    val userID = varchar("userID", 36).references(UserTable.GUID, onDelete = ReferenceOption.CASCADE)
-    val deviceID = varchar("deviceID", 36).uniqueIndex().references(DeviceTable.GUID, onDelete = ReferenceOption.CASCADE)
+    val userID = reference("userID", UserTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
+    val deviceID = reference("deviceID", DeviceTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE).uniqueIndex()
     val deviceType = text("deviceType")
     val lastPing = long("lastPing").nullable()
     val mediaActivity = jsonCol<MediaActivity>("mediaActivity", json).nullable()

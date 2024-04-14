@@ -7,13 +7,15 @@ import moe.styx.common.extension.currentUnixSeconds
 import org.jetbrains.exposed.sql.*
 
 object LogTable : Table("logs") {
-    val userID = varchar("userID", 36).references(UserTable.GUID, onDelete = ReferenceOption.CASCADE)
-    val deviceID = varchar("deviceID", 36).references(DeviceTable.GUID)
+    val userID = varchar("userID", 36)
+    val deviceID = varchar("deviceID", 36)
     val type = text("type")
     val content = largeText("content").nullable()
     val time = long("time")
 
-    fun insertItem(item: Log) = insert {
+    override val primaryKey = PrimaryKey(userID, deviceID, time)
+
+    fun upsertItem(item: Log) = upsert {
         it[userID] = item.userID
         it[deviceID] = item.deviceID
         it[type] = item.type.name

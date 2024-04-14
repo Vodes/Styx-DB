@@ -7,11 +7,13 @@ kotlin = "1.9.23"
 hikari = "5.1.0"
 exposed = "0.49.0"
 postgre = "42.7.3"
+mysql = "8.3.0"
 
 [libraries]
 styx-common = { module = "moe.styx:styx-common-jvm", version.ref = "styx-common" }
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 jdbc-postgre = { module = "org.postgresql:postgresql", version.ref = "postgre" }
+jdbc-mysql = { module = "com.mysql:mysql-connector-j", version.ref = "mysql" }
 
 jetbrains-exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 jetbrains-exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }

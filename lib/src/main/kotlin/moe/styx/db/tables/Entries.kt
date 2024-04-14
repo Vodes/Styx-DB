@@ -9,14 +9,14 @@ import org.jetbrains.exposed.sql.upsert
 
 object MediaEntryTable : Table("media_entries") {
     val GUID = varchar("GUID", 36)
-    val mediaID = varchar("mediaID", 36).references(MediaTable.GUID, onDelete = ReferenceOption.CASCADE)
+    val mediaID = reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
     val timestamp = long("timestamp")
     val entryNumber = varchar("entryNumber", 4)
     val nameEN = mediumText("nameEN").nullable()
     val nameDE = mediumText("nameDE").nullable()
     val synopsisEN = mediumText("synopsisEN").nullable()
     val synopsisDE = mediumText("synopsisDE").nullable()
-    val thumbID = varchar("thumbID", 36).references(ImageTable.GUID).nullable()
+    val thumbID = reference("thumbID", ImageTable.GUID, onDelete = ReferenceOption.SET_NULL, onUpdate = ReferenceOption.CASCADE).nullable()
     val filePath = mediumText("filePath")
     val fileSize = long("fileSize").nullable()
     val originalName = mediumText("originalName").nullable()
@@ -32,7 +32,7 @@ object MediaEntryTable : Table("media_entries") {
         it[nameDE] = item.nameDE
         it[synopsisEN] = item.synopsisEN
         it[synopsisDE] = item.synopsisDE
-        it[thumbID] = item.thumbID
+        it[thumbID] = if (item.thumbID.isNullOrBlank()) null else item.thumbID
         it[filePath] = item.filePath
         it[fileSize] = item.fileSize
         it[originalName] = item.originalName
@@ -59,7 +59,7 @@ object MediaEntryTable : Table("media_entries") {
 }
 
 object MediaInfoTable : Table("media_info") {
-    val entryID = varchar("entryID", 36).references(MediaEntryTable.GUID, onDelete = ReferenceOption.CASCADE)
+    val entryID = reference("entryID", MediaEntryTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
     val videoCodec = text("videoCodec")
     val videoBitdepth = integer("videoBitdepth")
     val videoRes = text("videoRes")

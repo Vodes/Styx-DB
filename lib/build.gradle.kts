@@ -23,6 +23,7 @@ dependencies {
     api(libs.jetbrains.exposed.json)
 
     testImplementation(libs.jdbc.postgre)
+    testImplementation(libs.jdbc.mysql)
 }
 
 java {
