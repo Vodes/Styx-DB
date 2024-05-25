@@ -27,7 +27,7 @@ class DBClient(
             maximumPoolSize = maxConnections
         }
         databaseConnection = Database.connect(HikariDataSource(config))
-        createTables()
+        transaction { createTables() }
     }
 
     suspend fun <T> asyncTransaction(block: suspend () -> T): T = newSuspendedTransaction(Dispatchers.IO, databaseConnection) {
