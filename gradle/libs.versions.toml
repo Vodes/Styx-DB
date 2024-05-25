@@ -3,11 +3,11 @@
 
 [versions]
 styx-common = "0.1.0"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 hikari = "5.1.0"
-exposed = "0.49.0"
+exposed = "0.50.1"
 postgre = "42.7.3"
-mysql = "8.3.0"
+mysql = "8.4.0"
 
 [libraries]
 styx-common = { module = "moe.styx:styx-common-jvm", version.ref = "styx-common" }
