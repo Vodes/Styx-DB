@@ -53,8 +53,8 @@ object MediaTable : Table("media") {
             Media(
                 it[GUID],
                 it[name],
-                it[nameEN],
                 it[nameJP],
+                it[nameEN],
                 it[synopsisEN],
                 it[synopsisDE],
                 it[thumbID],
