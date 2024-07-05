@@ -2,10 +2,10 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-styx-common = "0.1.0"
+styx-common = "0.1.1"
 kotlin = "2.0.0"
 hikari = "5.1.0"
-exposed = "0.50.1"
+exposed = "0.52.0"
 postgre = "42.7.3"
 mysql = "8.4.0"
 
