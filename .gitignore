@@ -5,3 +5,5 @@
 build
 
 .temp-deps/
+.idea/runConfigurations.xml
+.idea/Styx-DB.iml
