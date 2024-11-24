@@ -56,7 +56,8 @@ class DBClient(
             DeviceTrafficTable,
             LogTable,
             ChangesTable,
-            DownloaderTargetsTable
+            DownloaderTargetsTable,
+            APIStateTable
         )
     }
 }

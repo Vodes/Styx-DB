@@ -1,9 +1,11 @@
 package moe.styx.db.tables
 
+import moe.styx.common.data.APIState
 import moe.styx.common.data.Changes
 import moe.styx.common.data.Log
 import moe.styx.common.data.LogType
 import moe.styx.common.extension.currentUnixSeconds
+import moe.styx.common.extension.toBoolean
 import org.jetbrains.exposed.sql.*
 
 object LogTable : Table("logs") {
@@ -63,5 +65,21 @@ object ChangesTable : Table("change") {
                 current[lastEntryChange]
             )
         }
+    }
+}
+
+object APIStateTable : Table("state") {
+    val id = integer("id").default(0)
+    val lastTrafficUpdate = long("lastTrafficUpdate")
+
+    override val primaryKey = PrimaryKey(id)
+
+    fun setToNow() = upsert {
+        it[lastTrafficUpdate] = currentUnixSeconds()
+    }.insertedCount.toBoolean()
+
+    fun getCurrent(): APIState? {
+        val current = selectAll().toList().firstOrNull()
+        return current?.let { APIState(it[lastTrafficUpdate]) }
     }
 }

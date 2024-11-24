@@ -20,6 +20,7 @@ object MediaEntryTable : Table("media_entries") {
     val filePath = mediumText("filePath")
     val fileSize = long("fileSize").nullable()
     val originalName = mediumText("originalName").nullable()
+    val originalParentFolder = mediumText("originalParentFolder").nullable()
 
     override val primaryKey = PrimaryKey(GUID)
 
@@ -36,6 +37,7 @@ object MediaEntryTable : Table("media_entries") {
         it[filePath] = item.filePath
         it[fileSize] = item.fileSize
         it[originalName] = item.originalName
+        it[originalParentFolder] = item.originalParentFolder
     }
 
     fun query(block: MediaEntryTable.() -> List<ResultRow>): List<MediaEntry> {
@@ -52,7 +54,8 @@ object MediaEntryTable : Table("media_entries") {
                 it[thumbID],
                 it[filePath],
                 it[fileSize] ?: 0,
-                it[originalName]
+                it[originalName],
+                it[originalParentFolder]
             )
         }
     }
