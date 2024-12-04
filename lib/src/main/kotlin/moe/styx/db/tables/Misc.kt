@@ -1,9 +1,6 @@
 package moe.styx.db.tables
 
-import moe.styx.common.data.APIState
-import moe.styx.common.data.Changes
-import moe.styx.common.data.Log
-import moe.styx.common.data.LogType
+import moe.styx.common.data.*
 import moe.styx.common.extension.currentUnixSeconds
 import moe.styx.common.extension.toBoolean
 import org.jetbrains.exposed.sql.*
@@ -81,5 +78,29 @@ object APIStateTable : Table("state") {
     fun getCurrent(): APIState? {
         val current = selectAll().toList().firstOrNull()
         return current?.let { APIState(it[lastTrafficUpdate]) }
+    }
+}
+
+object ProxyServerTable : Table("proxy_servers") {
+    val name = text("name")
+    val baseURL = text("baseURL")
+    val country = text("country")
+
+    override val primaryKey = PrimaryKey(name)
+
+    fun upsertItem(item: ProxyServer) = upsert {
+        it[name] = item.name
+        it[baseURL] = item.baseURL
+        it[country] = item.country
+    }
+
+    fun query(block: ProxyServerTable.() -> List<ResultRow>): List<ProxyServer> {
+        return block(this).map {
+            ProxyServer(
+                it[name],
+                it[baseURL],
+                it[country],
+            )
+        }
     }
 }
