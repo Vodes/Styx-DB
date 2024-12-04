@@ -57,7 +57,8 @@ class DBClient(
             LogTable,
             ChangesTable,
             DownloaderTargetsTable,
-            APIStateTable
+            APIStateTable,
+            ProxyServerTable
         )
     }
 }
