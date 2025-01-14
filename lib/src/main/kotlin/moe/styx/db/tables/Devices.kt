@@ -19,6 +19,8 @@ object DeviceTable : Table("device") {
     val watchToken = varchar("watchToken", 36).nullable()
     val refreshToken = varchar("refreshToken", 36)
     val tokenExpiry = long("tokenExpiry").nullable()
+    val added = long("added").nullable()
+    val isDevDevice = integer("isDevDevice").nullable()
 
     override val primaryKey = PrimaryKey(GUID)
 
@@ -32,6 +34,8 @@ object DeviceTable : Table("device") {
         it[watchToken] = item.watchToken
         it[refreshToken] = item.refreshToken
         it[tokenExpiry] = item.tokenExpiry
+        it[added] = item.added
+        it[isDevDevice] = item.isDevDevice
     }
 
     fun query(block: DeviceTable.() -> List<ResultRow> = { selectAll().toList() }): List<Device> {
@@ -45,7 +49,9 @@ object DeviceTable : Table("device") {
                 it[accessToken] ?: "",
                 it[watchToken] ?: "",
                 it[refreshToken],
-                it[tokenExpiry] ?: 0
+                it[tokenExpiry] ?: 0,
+                it[added] ?: 0,
+                it[isDevDevice] ?: 0
             )
         }
     }
@@ -63,6 +69,8 @@ object DeviceTable : Table("device") {
                 it[watchToken] = item.watchToken
                 it[refreshToken] = item.refreshToken
                 it[tokenExpiry] = item.tokenExpiry
+                it[added] = item.added
+                it[isDevDevice] = item.isDevDevice
             }
         }
         return deleted
@@ -79,6 +87,8 @@ object DeviceGraveyard : Table("device_graveyard") {
     val watchToken = varchar("watchToken", 36).nullable()
     val refreshToken = varchar("refreshToken", 36)
     val tokenExpiry = long("tokenExpiry").nullable()
+    val added = long("added").nullable()
+    val isDevDevice = integer("isDevDevice").nullable()
 
     override val primaryKey = PrimaryKey(GUID)
 }
