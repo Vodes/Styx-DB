@@ -2,7 +2,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-styx-common = "0.5.2"
+styx-common = "0.5.3"
 kotlin = "2.1.10"
 hikari = "6.3.0"
 exposed = "0.60.0"
