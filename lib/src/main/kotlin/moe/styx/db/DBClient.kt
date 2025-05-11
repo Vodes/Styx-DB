@@ -58,7 +58,8 @@ class DBClient(
             ChangesTable,
             DownloaderTargetsTable,
             APIStateTable,
-            ProxyServerTable
+            ProxyServerTable,
+            UserMediaPreferencesTable
         )
     }
 }

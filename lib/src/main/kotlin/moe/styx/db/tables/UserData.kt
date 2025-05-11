@@ -1,11 +1,15 @@
 package moe.styx.db.tables
 
 import moe.styx.common.data.Favourite
+import moe.styx.common.data.MediaPreferences
 import moe.styx.common.data.MediaWatched
+import moe.styx.common.data.UserMediaPreferences
+import moe.styx.common.json
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.sql.json.json as jsonCol
 
 object FavouriteTable : Table("user_favourite") {
     val mediaID = reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
@@ -59,6 +63,30 @@ object MediaWatchedTable : Table("user_media_watched") {
                 it[progress],
                 it[progressPercent],
                 it[maxProgress]
+            )
+        }
+    }
+}
+
+object UserMediaPreferencesTable : Table("user_media_preferences") {
+    val mediaID = reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
+    val userID = reference("userID", UserTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
+    val mediaPreference = jsonCol<MediaPreferences>("mediaPreferences", json)
+
+    override val primaryKey = PrimaryKey(mediaID, userID)
+
+    fun upsertItem(item: UserMediaPreferences) = upsert {
+        it[mediaID] = item.mediaID
+        it[userID] = item.userID
+        it[mediaPreference] = item.mediaPreferences
+    }
+
+    fun query(block: UserMediaPreferencesTable.() -> List<ResultRow>): List<UserMediaPreferences> {
+        return block(this).map {
+            UserMediaPreferences(
+                it[userID],
+                it[mediaID],
+                it[mediaPreference]
             )
         }
     }
