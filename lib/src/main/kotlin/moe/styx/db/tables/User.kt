@@ -1,9 +1,6 @@
 package moe.styx.db.tables
 
-import moe.styx.common.data.ActiveUser
-import moe.styx.common.data.AnilistData
-import moe.styx.common.data.MediaActivity
-import moe.styx.common.data.User
+import moe.styx.common.data.*
 import moe.styx.common.extension.eqI
 import moe.styx.common.json
 import org.jetbrains.exposed.sql.*
@@ -47,6 +44,7 @@ object UserTable : Table("user") {
     val lastLogin = long("lastLogin")
     val permissions = integer("permissions")
     val anilistData = jsonCol<AnilistData>("anilistData", json).nullable()
+    val malData = jsonCol<MyAnimeListData>("malData", json).nullable()
 
     override val primaryKey = PrimaryKey(GUID)
 
@@ -58,8 +56,11 @@ object UserTable : Table("user") {
         it[lastLogin] = item.lastLogin
         it[permissions] = item.permissions
         it[anilistData] = item.anilistData
+        it[malData] = item.malData
     }
 
     fun query(block: UserTable.() -> List<ResultRow>) =
-        block(this).map { User(it[GUID], it[name], it[discordID], it[added], it[lastLogin], it[permissions], it[anilistData]) }
+        block(this).map {
+            User(it[GUID], it[name], it[discordID], it[added], it[lastLogin], it[permissions], it[anilistData], it[malData])
+        }
 }

@@ -2,8 +2,8 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-styx-common = "0.5.3"
-kotlin = "2.1.10"
+styx-common = "0.5.5"
+kotlin = "2.1.20"
 hikari = "6.3.0"
 exposed = "0.60.0"
 postgre = "42.7.5"
