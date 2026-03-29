@@ -5,9 +5,15 @@ import moe.styx.common.data.DeviceInfo
 import moe.styx.common.data.UnregisteredDevice
 import moe.styx.common.extension.toBoolean
 import moe.styx.common.json
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.json.json as jsonCol
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.upsert
+import org.jetbrains.exposed.v1.json.json as jsonCol
 
 object DeviceTable : Table("device") {
     val GUID = varchar("GUID", 36)

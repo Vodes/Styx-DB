@@ -2,10 +2,10 @@ package moe.styx.db.tables
 
 import moe.styx.common.data.MediaEntry
 import moe.styx.common.data.MediaInfo
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.upsert
 
 object MediaEntryTable : Table("media_entries") {
     val GUID = varchar("GUID", 36)

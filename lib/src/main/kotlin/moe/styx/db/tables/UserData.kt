@@ -5,11 +5,12 @@ import moe.styx.common.data.MediaPreferences
 import moe.styx.common.data.MediaWatched
 import moe.styx.common.data.UserMediaPreferences
 import moe.styx.common.json
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.upsert
-import org.jetbrains.exposed.sql.json.json as jsonCol
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.upsert
+import org.jetbrains.exposed.v1.json.json as jsonCol
+
 
 object FavouriteTable : Table("user_favourite") {
     val mediaID = reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)

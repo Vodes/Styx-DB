@@ -3,8 +3,12 @@ package moe.styx.db.tables
 import moe.styx.common.data.*
 import moe.styx.common.extension.eqI
 import moe.styx.common.json
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.json.json as jsonCol
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.upsert
+import org.jetbrains.exposed.v1.json.json as jsonCol
 
 
 object ActiveUserTable : Table("user_active") {

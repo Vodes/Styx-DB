@@ -3,11 +3,11 @@ package moe.styx.db.tables
 import moe.styx.common.data.DownloadableOption
 import moe.styx.common.data.DownloaderTarget
 import moe.styx.common.json
-import org.jetbrains.exposed.sql.ReferenceOption
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.upsert
-import org.jetbrains.exposed.sql.json.json as jsonCol
+import org.jetbrains.exposed.v1.core.ReferenceOption
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.upsert
+import org.jetbrains.exposed.v1.json.json as jsonCol
 
 object DownloaderTargetsTable : Table("media_download_target") {
     val mediaID = reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)

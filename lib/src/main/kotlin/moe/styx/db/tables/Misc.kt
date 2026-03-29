@@ -3,7 +3,12 @@ package moe.styx.db.tables
 import moe.styx.common.data.*
 import moe.styx.common.extension.currentUnixSeconds
 import moe.styx.common.extension.toBoolean
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jdbc.insert
+import org.jetbrains.exposed.v1.jdbc.selectAll
+import org.jetbrains.exposed.v1.jdbc.update
+import org.jetbrains.exposed.v1.jdbc.upsert
 
 object LogTable : Table("logs") {
     val userID = varchar("userID", 36)
