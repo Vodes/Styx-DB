@@ -12,3 +12,13 @@ plugins {
 
 rootProject.name = "styx-db"
 include("lib")
+
+val localCommon = file("../Styx-Common")
+if (localCommon.isDirectory) {
+    includeBuild(localCommon) {
+        dependencySubstitution {
+            substitute(module("moe.styx:styx-common-jvm"))
+                .using(project(":styx-common"))
+        }
+    }
+}
