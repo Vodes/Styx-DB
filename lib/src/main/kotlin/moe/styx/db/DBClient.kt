@@ -5,9 +5,11 @@ import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import moe.styx.db.tables.*
 import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.transactions.transactionManager
 
 class DBClient(
     private val connectionString: String,
@@ -34,7 +36,11 @@ class DBClient(
         block()
     }
 
-    fun <T> transaction(block: () -> T): T = transaction(databaseConnection) {
+    fun <T> transaction(
+        transactionIsolation: Int? = databaseConnection.transactionManager.defaultIsolationLevel,
+        readOnly: Boolean? = databaseConnection.transactionManager.defaultReadOnly,
+        block: JdbcTransaction.() -> T
+    ): T = transaction(databaseConnection, transactionIsolation, readOnly) {
         block()
     }
 
@@ -59,7 +65,9 @@ class DBClient(
             DownloaderTargetsTable,
             APIStateTable,
             ProxyServerTable,
-            UserMediaPreferencesTable
+            UserMediaPreferencesTable,
+            WebTempLinkTable,
+            WebLoginTable
         )
     }
 }
