@@ -1,5 +1,6 @@
 package moe.styx.db.tables
 
+import moe.styx.common.data.ShowVoting
 import moe.styx.common.data.WebLogin
 import moe.styx.common.data.WebTempLink
 import org.jetbrains.exposed.v1.core.ReferenceOption
@@ -59,6 +60,42 @@ object WebLoginTable : Table("web_login") {
                 it[createdAt],
                 it[expiresAt],
                 it[token]
+            )
+        }
+    }
+}
+
+object ShowVotingTable : Table("show_voting") {
+    val title = text("title")
+    val anilistID = integer("anilistID")
+    val votes = integer("votes")
+    val hasVeto = bool("hasVeto")
+    val serverID = long("serverID")
+    val channelID = long("channelID")
+    val messageID = long("messageID")
+
+    override val primaryKey = PrimaryKey(anilistID)
+
+    fun upsertItem(item: ShowVoting) = upsert {
+        it[title] = item.title
+        it[anilistID] = item.anilistID
+        it[votes] = item.votes
+        it[hasVeto] = item.hasVeto
+        it[serverID] = item.serverID
+        it[channelID] = item.channelID
+        it[messageID] = item.messageID
+    }
+
+    fun query(block: ShowVotingTable.() -> List<ResultRow>): List<ShowVoting> {
+        return block(this).map {
+            ShowVoting(
+                it[title],
+                it[anilistID],
+                it[votes],
+                it[hasVeto],
+                it[serverID],
+                it[channelID],
+                it[messageID]
             )
         }
     }

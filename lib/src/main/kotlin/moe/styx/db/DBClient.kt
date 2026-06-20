@@ -67,7 +67,8 @@ class DBClient(
             ProxyServerTable,
             UserMediaPreferencesTable,
             WebTempLinkTable,
-            WebLoginTable
+            WebLoginTable,
+            ShowVotingTable
         )
     }
 }
