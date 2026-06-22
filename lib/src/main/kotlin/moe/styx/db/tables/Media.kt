@@ -1,10 +1,9 @@
 package moe.styx.db.tables
 
 import moe.styx.common.data.*
+import moe.styx.common.data.tmdb.StackType
 import moe.styx.common.json
-import org.jetbrains.exposed.v1.core.ReferenceOption
-import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.*
 import org.jetbrains.exposed.v1.jdbc.upsert
 import org.jetbrains.exposed.v1.json.json as jsonCol
 
@@ -16,9 +15,24 @@ object MediaTable : Table("media") {
     val nameJP = mediumText("nameJP").nullable()
     val synopsisEN = largeText("synopsisEN").nullable()
     val synopsisDE = largeText("synopsisDE").nullable()
-    val thumbID = reference("thumbID", ImageTable.GUID, onDelete = ReferenceOption.SET_NULL, onUpdate = ReferenceOption.CASCADE).nullable()
-    val bannerID = reference("bannerID", ImageTable.GUID, onDelete = ReferenceOption.SET_NULL, onUpdate = ReferenceOption.CASCADE).nullable()
-    val categoryID = reference("categoryID", CategoryTable.GUID, onDelete = ReferenceOption.SET_NULL, onUpdate = ReferenceOption.CASCADE).nullable()
+    val thumbID = reference(
+        "thumbID",
+        ImageTable.GUID,
+        onDelete = ReferenceOption.SET_NULL,
+        onUpdate = ReferenceOption.CASCADE
+    ).nullable()
+    val bannerID = reference(
+        "bannerID",
+        ImageTable.GUID,
+        onDelete = ReferenceOption.SET_NULL,
+        onUpdate = ReferenceOption.CASCADE
+    ).nullable()
+    val categoryID = reference(
+        "categoryID",
+        CategoryTable.GUID,
+        onDelete = ReferenceOption.SET_NULL,
+        onUpdate = ReferenceOption.CASCADE
+    ).nullable()
     val prequel = varchar("prequel", 36).nullable()
     val sequel = varchar("sequel", 36).nullable()
     val genres = mediumText("genres").nullable()
@@ -28,6 +42,30 @@ object MediaTable : Table("media") {
     val added = long("added")
 
     override val primaryKey = PrimaryKey(GUID)
+
+    /**
+     * Where check to find a media row with a certain remoteID in a certain stack.
+     * The idea is to offload the json deserialization/processing to postgres because it's a lot more efficient.
+     *
+     * @param type StackType to be used (e.g. TMDB/AniList)
+     * @param remoteID The ID to search for
+     */
+    fun mappingRemoteIdExists(type: StackType, remoteID: Int): Op<Boolean> = object : Op<Boolean>() {
+        override fun toQueryBuilder(queryBuilder: QueryBuilder) {
+            val mappingKey = type.mappingCollectionKey()
+            queryBuilder {
+                append("jsonb_path_exists(")
+                append(metadataMap)
+                append("::jsonb, ")
+                append("'$.")
+                append(mappingKey)
+                append("[*] ? (@.remoteID == ")
+                append(remoteID.toString())
+                append(")'")
+                append(")")
+            }
+        }
+    }
 
     fun upsertItem(item: Media) = upsert {
         it[GUID] = item.GUID
@@ -43,7 +81,8 @@ object MediaTable : Table("media") {
         it[sequel] = item.sequel
         it[genres] = item.genres
         it[tags] = item.tags
-        it[metadataMap] = item.metadataMap?.let { kotlin.runCatching { json.decodeFromString<MappingCollection>(it) }.getOrNull() }
+        it[metadataMap] =
+            item.metadataMap?.let { runCatching { json.decodeFromString<MappingCollection>(it) }.getOrNull() }
         it[isSeries] = item.isSeries
         it[added] = item.added
     }
@@ -106,7 +145,8 @@ object ImageTable : Table("images") {
 }
 
 object MediaScheduleTable : Table("media_schedule") {
-    val mediaID = reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
+    val mediaID =
+        reference("mediaID", MediaTable.GUID, onDelete = ReferenceOption.CASCADE, onUpdate = ReferenceOption.CASCADE)
     val day = text("day")
     val hour = integer("hour")
     val minute = integer("minute")
@@ -167,3 +207,10 @@ object CategoryTable : Table("media_category") {
         }
     }
 }
+
+private fun StackType.mappingCollectionKey(): String =
+    when (this) {
+        StackType.ANILIST -> "anilistMappings"
+        StackType.TMDB -> "tmdbMappings"
+        StackType.MAL -> "malMappings"
+    }
